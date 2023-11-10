@@ -2,7 +2,8 @@ const express = require('express');
 const mongoose = require('mongoose');
 const app = express();//Cette ligne crée une instance d'Express en appelant express(). app devient l'instance principale de l'application Express, à travers laquelle vous pouvez configurer des routes et des gestionnaires de requêtes.
 const stuffRoutes = require('./routes/stuff');
-
+const userRoutes = require('./routes/user');
+const path = require('path');
 
 
 //Connexion à la base de données
@@ -23,7 +24,8 @@ app.use((req, res, next) => {//le middleware ne prend pas d'adresse en premier p
   next();
 });
 
-//utilise les routes définies dans le module stuffRoutes pour gérer les requêtes relatives aux objets "stuff". Les routes de l'API commencent par /api/stuff. Par exemple, une requête GET à /api/stuff sera gérée par stuffRoutes.
-app.use('/api/stuff', stuffRoutes);
+app.use('/images', express.static(path.join(__dirname, 'images')));// Cela indique à Express qu'il faut gérer la ressource images de manière statique (un sous-répertoire de notre répertoire de base, __dirname) à chaque fois qu'elle reçoit une requête vers la route /images
+app.use('/api/stuff', stuffRoutes);//utilise les routes définies dans le module stuffRoutes pour gérer les requêtes relatives aux objets "stuff". Les routes de l'API commencent par /api/stuff. Par exemple, une requête GET à /api/stuff sera gérée par stuffRoutes.
+app.use('/api/auth', userRoutes);
 
 module.exports = app;//Cette ligne crée une instance d'Express en appelant express(). app devient l'instance principale de l'application Express, à travers laquelle vous pouvez configurer des routes et des gestionnaires de requêtes.
