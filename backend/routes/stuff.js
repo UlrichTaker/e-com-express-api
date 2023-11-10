@@ -1,26 +1,23 @@
 const express = require('express');
-const auth = require('../middlewares/auth');
-const multer = require('../middlewares/multer-config');
+
 const router = express.Router();
 
 const stuffCtrl = require('../controllers/stuff');
 
-//Toutes les routes sont protégées par le middleware auth, ce qui signifie que l'utilisateur doit être authentifié pour y accéder
-
 //Recuperer tous les objets
-router.get('/', auth, stuffCtrl.getAllStuff);
+router.get('/', stuffCtrl.getAllStuff);
 
 //Enregistrement des objets
-router.post('/', auth, multer, stuffCtrl.createThing);
+router.post('/', stuffCtrl.createThing);
   
 //Recuperation d'une thing specifique
-router.get('/:id', auth, stuffCtrl.getOneThing);
+router.get('/:id', stuffCtrl.getOneThing);
 
 //Modification d'un objet
-router.put('/:id', auth, multer, stuffCtrl.modifyThing);
+router.put('/:id', stuffCtrl.modifyThing);
   
 //Supprimer un objet
-router.delete('/:id', auth, stuffCtrl.deleteThing);
+router.delete('/:id', stuffCtrl.deleteThing);
 
 
 module.exports = router;

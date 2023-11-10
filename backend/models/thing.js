@@ -9,5 +9,7 @@ const thingSchema = mongoose.Schema({
   price: { type: Number, required: true },
 });
 
+
+
 //nous exportons ce schéma en tant que modèle Mongoose appelé « Thing », le rendant par là même disponible pour notre application Express.Ce modèle vous permettra non seulement d'appliquer notre structure de données, mais aussi de simplifier les opérations de lecture et d'écriture dans la base de données
 module.exports = mongoose.model('Thing', thingSchema);
