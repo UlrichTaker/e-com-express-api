@@ -40,6 +40,20 @@ app.get('/api/stuff/:id', (req, res, next) => {//Cette ligne configure une route
     .catch(error => res.status(404).json({ error }));//Si aucune correspondance n'est trouvée dans la base de données (l'objet "thing" n'existe pas avec l'identifiant spécifié), le code dans le bloc .catch() est exécuté. Il renvoie une réponse d'erreur au client avec un code de statut 404 (Non trouvé), indiquant que la ressource demandée n'a pas été trouvée.
 });
 
+//Modification d'un objet
+app.put('/api/stuff/:id', (req, res, next) => {//Cette ligne configure une route PUT pour l'URL /api/stuff/:id. Le paramètre :id indique qu'il s'agit d'un paramètre dynamique dans l'URL, ce qui signifie que l'identifiant de l'objet "thing" à mettre à jour sera passé comme partie de l'URL. Par exemple, /api/stuff/123 mettra à jour l'objet avec l'identifiant "123".
+  Thing.updateOne({ _id: req.params.id }, { ...req.body, _id: req.params.id })//Cette ligne utilise la méthode .updateOne() de Mongoose pour mettre à jour un document dans la base de données. Elle prend deux arguments :Le premier argument spécifie les critères de recherche pour trouver le document à mettre à jour. Dans ce cas, on recherche un document ayant le même _id que celui passé dans req.params.id.Le deuxième argument spécifie les nouvelles valeurs à attribuer au document. ...req.body représente les données fournies dans le corps de la requête PUT, et _id: req.params.id garantit que l'identifiant ne sera pas modifié.
+    .then(() => res.status(200).json({ message: 'Objet modifié !'}))//Une fois que la mise à jour est effectuée avec succès, le code dans le bloc .then() est exécuté. Il renvoie une réponse JSON au client avec un code de statut 200 (OK), indiquant que la mise à jour a été effectuée avec succès.
+    .catch(error => res.status(400).json({ error }));//Si une erreur survient pendant la mise à jour, le code dans le bloc .catch() est exécuté. Il renvoie une réponse d'erreur au client avec un code de statut 400 (Mauvaise requête), et les détails de l'erreur sont inclus dans la réponse sous forme d'un objet JSON.
+});
+
+//Supprimer un objet
+app.delete('/api/stuff/:id', (req, res, next) => {//Cette ligne configure une route DELETE pour l'URL /api/stuff/:id. Le paramètre :id indique qu'il s'agit d'un paramètre dynamique dans l'URL, ce qui signifie que l'identifiant de l'objet "thing" à supprimer sera passé comme partie de l'URL. Par exemple, /api/stuff/123 supprimera l'objet avec l'identifiant "123".
+  Thing.deleteOne({ _id: req.params.id })//Cette ligne utilise la méthode .deleteOne() de Mongoose pour supprimer un document de la base de données. Elle prend un argument qui spécifie les critères de recherche pour trouver le document à supprimer. Dans ce cas, on recherche un document ayant le même _id que celui passé dans req.params.id.
+    .then(() => res.status(200).json({ message: 'Objet supprimé !'}))//Une fois que la suppression est effectuée avec succès, le code dans le bloc .then() est exécuté. Il renvoie une réponse JSON au client avec un code de statut 200 (OK), indiquant que l'objet a été supprimé avec succès.
+    .catch(error => res.status(400).json({ error }));//Si une erreur survient pendant la suppression, le code dans le bloc .catch() est exécuté. Il renvoie une réponse d'erreur au client avec un code de statut 400 (Mauvaise requête), et les détails de l'erreur sont inclus dans la réponse sous forme d'un objet JSON.
+});
+
 //Recuperer tous les objets
 // Cette route est configurée pour gérer uniquement les requêtes GET vers l'URL /api/stuff. Lorsqu'une requête GET est reçue à cette URL, le gestionnaire de route (la fonction anonyme) est exécuté.
 app.get('/api/stuff', (req, res, next) => {//La string api/stuff correspond à la route pour laquelle nous souhaitons enregistrer cet élément de middleware. Dans ce cas, cette route serahttp://localhost:3000/api/stuff , car il s'agit de l'URL demandée par l'application front-end.
